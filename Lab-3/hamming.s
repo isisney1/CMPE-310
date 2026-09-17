@@ -3,11 +3,14 @@ prompt_1:    .ascii "Enter the first string: "
 prompt_1_len = . - prompt_1
 prompt_2:    .ascii "Enter the second string: "
 prompt_2_len = . - prompt_2
+prompt_3:    .ascii "The hamming distance is: "
+prompt_3_len = . - prompt_3
 
 .section .bss
 .lcomm string_1, 256                # reserve 256 bytes for string 1 (255 characters)
 .lcomm string_2, 256                # reserve 256 bytes for string 2 (255 characters)
 .lcomm hamming_distance, 4          # reserve 4 bytes for hamming distance
+.lcomm output, 4
 
 .section .text
 .global _start
@@ -48,9 +51,10 @@ _start:
     movl %eax, %ebx                 # set EBX to string 2 size
 
     compare:
-        movq $string_1, %rsi
-        movq $string_2, %rdi
-        movl $0, %ecx
+        movq $string_1, %rsi        # create a pointer to string 1
+        movq $string_2, %rdi        # create a pointer to string 2
+        movl $0, %ecx               # ECX = 0
+        decl %ebx                   # remove the \n at the end of the shortest string
 
     character_loop:
         movb (%rsi), %ah
@@ -73,14 +77,30 @@ _start:
         jnz character_loop          # continue looping if EBX != 0
 
     movl %ecx, hamming_distance
-    
-    movq $1, %rax                   # write
-    movq $1, %rdi                   # stdout
-    movq $hamming_distance, %rsi    # buf
-    movq $4, %rdx                   # len
-    syscall
+
+    # Convert Hamming distance to ASCII
+    movl %ecx, %eax
+    movl $10, %ebx
+    movq $output + 4, %r8
+
+    convert:
+        xorl %edx, %edx
+        divl %ebx
+        addb $'0', %dl
+        decq %r8
+        movb %dl, (%r8)
+        testl %eax, %eax
+        jnz convert
+
+        # Print the Hamming distance
+        movq $1, %rax
+        movq $1, %rdi
+        movq %r8, %rsi
+        movq $output + 4, %rdx
+        subq %r8, %rdx
+        syscall
 
     done:
-        movq $60, %rax              # exit
-        movq $0,  %rdi              # status
+        movq $60, %rax
+        movq $0, %rdi
         syscall
