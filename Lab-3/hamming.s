@@ -61,22 +61,22 @@ _start:
         decl %ebx                   # remove the \n at the end of the shortest string
 
     character_loop:
-        movb (%rsi), %ah
-        movb (%rdi), %al
+        movb (%rsi), %ah            # AH = next character in string 1
+        movb (%rdi), %al            # AL = next character in string 2
 
-        xorb %ah, %al
+        xorb %ah, %al               # compare the characters with eacother
         
         count_ones:
-            testb $1, %al
-            jz file_through
-            incl %ecx
+            testb $1, %al           # test the first bit
+            jz file_through         # go to file through loop if its a zero
+            incl %ecx               # if its a one increase the count
 
         file_through:
-            shrb $1, %al
-            jnz count_ones
+            shrb $1, %al            # shift to the next bit
+            jnz count_ones          # continue counting
 
-        incq %rsi
-        incq %rdi
+        incq %rsi                   # next character in string 1
+        incq %rdi                   # next character in string 2
         decl %ebx                   # EBX = EBX - 1
         jnz character_loop          # continue looping if EBX != 0
 
