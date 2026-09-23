@@ -14,7 +14,7 @@ newline:    .ascii "\n"
 .lcomm string_1, 256                # reserve 256 bytes for string 1 (255 characters)
 .lcomm string_2, 256                # reserve 256 bytes for string 2 (255 characters)
 .lcomm hamming_distance, 4          # reserve 4 bytes for hamming distance
-.lcomm output, 4
+.lcomm output, 4                    # reserve 4 bytes for output
 
 .section .text
 .global _start
@@ -90,25 +90,24 @@ _start:
     syscall
 
     # Convert Hamming distance to ASCII
-    movl hamming_distance, %eax
-    movl $10, %ebx
-    movq $output + 4, %r8
+    movl hamming_distance, %eax     # EAX = hamming_distance
+    movl $10, %ebx                  # EBX = 10 (divisor)
+    movl $output + 4, %ecx          # set ECX to start from last first digit
 
     convert:
-        xorl %edx, %edx
-        divl %ebx
-        addb $'0', %dl
-        decq %r8
-        movb %dl, (%r8)
-        testl %eax, %eax
-        jnz convert
+        movl $0, %edx               # EDX = 0
+        divl %ebx                   # divide EBX by EAX, EAX = quotient, EDX = remainder
+        addb $'0', %dl              # convert remainder to ASCII
+        decl %ecx                   # go to the next digit
+        movb %dl, (%ecx)            # move the converted number to output
+        cmpl $0, %eax               # check EAX = 0
+        jne convert                 # loop if EAX != 0
 
     # Print the Hamming distance
-    movq $1, %rax
-    movq $1, %rdi
-    movq %r8, %rsi
-    movq $output + 4, %rdx
-    subq %r8, %rdx
+    movq $1, %rax                   # write
+    movq $1, %rdi                   # stdout
+    movq $output, %rsi              # buf
+    movq $4, %rdx                   # len
     syscall
 
     # Newline
