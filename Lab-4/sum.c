@@ -2,26 +2,33 @@
 extern unsigned int sum; // Result declared in assembly
 extern void sum_up(int[], int); // Assembly function
 int main() {
-    int total_nums = 51; // Total numbers to read from data.txt
-    int numbers[total_nums];
+    char filename[] = "data.txt";
 
-    // Get numbers from data.txt
-    FILE *data = fopen("data.txt", "r");
+    // Prompt user for filename and open file
+    printf("Enter filename: ");
+    scanf("%s", filename);
+    FILE *data = fopen(filename, "r");
 
+    // Check if file opened successfully
     if (data != NULL) {
-        printf("Numbers from data.txt:\n");
+        // Get total numbers from file
+        int total_nums;
+        fscanf(data, "%d", &total_nums);
+
+        // Declare array to hold numbers
+        int numbers[total_nums];
 
         // Read numbers from file and store in array
         for (int i = 0; i < total_nums; i++) {
             fscanf(data, "%d", &numbers[i]);
         }
-        
+
         sum_up(numbers, total_nums); // Run assembly code
-        printf("Sum: %u\n", sum); // Print result
+        printf("Sum of %i numbers in %s: %u\n", total_nums, filename, sum); // Print result
 
         fclose(data); // Close file
     } else {
-        printf("Error opening data.txt\n"); // Error handling
+        printf("Error opening %s\n", filename);
     }
     
     return 0;
