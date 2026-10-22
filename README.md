@@ -3,3 +3,4 @@ Lab-2&emsp;&emsp;&emsp;09/17/26, 11:59 PM (EDT)<br>
 Lab-3&emsp;&emsp;&emsp;09/24/26, 11:59 PM (EDT)<br>
 Lab-4&emsp;&emsp;&emsp;10/01/26, 11:59 PM (EDT)<br>
 Lab-5&emsp;&emsp;&emsp;10/08/26, 11:59 PM (EDT)<br>
+Lab-6&emsp;&emsp;&emsp;10/29/26, 11:59 PM (EDT)<br>
