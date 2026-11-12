@@ -22,7 +22,7 @@ _start:
                 out %al, %dx                # disable all digits
 
                 mov $0b01101101, %al        # S: segments a,c,d,f,g ON
-                mov $0x641, %dx             # point DX to Port B
+                mov $0x641, %dx             # point DX to port B
                 out %al, %dx                # output 'S' to the selected 7-segment digit
 
                 mov %ah, %al                # enable digit, keep other digits off
@@ -37,7 +37,7 @@ _start:
                 out %al, %dx                # disable all digits
 
                 mov $0b01110110, %al        # H: segments b,c,e,f,g ON
-                mov $0x641, %dx             # point DX to Port B
+                mov $0x641, %dx             # point DX to port B
                 out %al, %dx                # output 'H' to the selected 7-segment digit
 
                 mov %ah, %al                # enable digit, keep other digits off
@@ -52,7 +52,7 @@ _start:
                 out %al, %dx                # disable all digits
 
                 mov $0b01111001, %al        # E: segments a,d,e,f,g ON
-                mov $0x641, %dx             # point DX to Port B
+                mov $0x641, %dx             # point DX to port B
                 out %al, %dx                # output 'E' to the selected 7-segment digit
 
                 mov %ah, %al                # enable digit, keep other digits off
