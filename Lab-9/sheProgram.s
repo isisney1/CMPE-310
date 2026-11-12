@@ -13,7 +13,7 @@ _start:
     out %al, %dx                # configure all ports as mode 0 outputs
 
     LOOP:
-        mov $0xFFFF, %cx           # number of loops (wait states)
+        mov $0xFFFF, %cx           # number of loops (wait)
 
         WORD:
             S:
